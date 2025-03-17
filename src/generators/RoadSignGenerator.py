@@ -43,11 +43,11 @@ class RoadSignGenerator:
                 initial_placement = (side, left_line_placement_generator.randomize_placement(fixed = True))
         elif (side == "right"):
             # right means that its anchored to the right road line
-            initial_placement = (side, right_line_placement_generator.randomize_placement())
+            initial_placement = ("right", right_line_placement_generator.randomize_placement())
             if roadsign_name == "mile_marker":
                 initial_placement = (side, right_line_placement_generator.randomize_placement(fixed = True))
-            
-        pole = self.builder.build_pole(initial_placement[1]) if roadsign_name != "mile_marker" else self.builder.build_small_pole(initial_placement[1])    
+        
+        pole = self.builder.build_pole(initial_placement[1]) if roadsign_name != "mile_marker" else self.builder.build_small_pole(initial_placement[1])  
         start_sign_point = self._get_sign_start_point(pole)
         
 
