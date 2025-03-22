@@ -17,7 +17,8 @@ class Builder():
                     "name": "diamond_warning_sign",
                     "primary_color": colors.yellow,
                     "secondary_color": colors.wood_brown,
-                    "label_value": (200, 201)
+                    "label_value": (1, 2),
+                    "pole_type": "normal"
                 }
             },
             "speed_limit_sign": {
@@ -26,7 +27,8 @@ class Builder():
                     "name": "speed_limit_sign",
                     "primary_color": colors.white,
                     "secondary_color": colors.silver,
-                    "label_value": (202, 203)
+                    "label_value": (3, 4),
+                    "pole_type": "normal"
                 }
             },
             "stop_sign": {
@@ -35,7 +37,8 @@ class Builder():
                     "name": "stop_sign",
                     "primary_color": colors.red,
                     "secondary_color": colors.wood_brown,
-                    "label_value": (204, 205)
+                    "label_value": (5, 6),
+                    "pole_type": "normal"
                 }
             },
             "small_informational_sign": {
@@ -44,7 +47,8 @@ class Builder():
                     "name": "small_informational_sign",
                     "primary_color": colors.green,
                     "secondary_color": colors.silver,
-                    "label_value": (206, 207)
+                    "label_value": (7, 8),
+                    "pole_type": "normal"
                 }
             },
             "large_informational_sign": {
@@ -53,7 +57,8 @@ class Builder():
                     "name": "large_informational_sign",
                     "primary_color": colors.green,
                     "secondary_color": colors.silver,
-                    "label_value": (208, 209)
+                    "label_value": (9, 10),
+                    "pole_type": "double"
                 }
             },
             "yield_sign": {
@@ -62,7 +67,8 @@ class Builder():
                     "name": "yield_sign",
                     "primary_color": colors.red,
                     "secondary_color": colors.wood_brown,
-                    "label_value": (210, 211)
+                    "label_value": (11, 12),
+                    "pole_type": "normal"
                 }
             },
             "freeway_sign": {
@@ -71,7 +77,8 @@ class Builder():
                     "name": "freeway_sign",
                     "primary_color": colors.blue,
                     "secondary_color": colors.silver,
-                    "label_value": (212, 213)
+                    "label_value": (13, 14),
+                    "pole_type": "normal"
                 }
             },
             "traffic_cone": {
@@ -80,7 +87,8 @@ class Builder():
                     "name": "traffic_cone",
                     "primary_color": colors.orange,
                     "secondary_color": colors.white,
-                    "label_value": (214, 215)
+                    "label_value": (15, 16), # Should be changed to just 1 label
+                    "pole_type": "normal"
                 }
             },
             "mile_marker":{
@@ -89,7 +97,8 @@ class Builder():
                     "name": "mile_marker",
                     "primary_color": colors.green,
                     "secondary_color": colors.silver,
-                    "label_value": (216, 217)
+                    "label_value": (17, 18),
+                    "pole_type": "short"
                 }
             },
             "road_work_sign":{
@@ -98,7 +107,8 @@ class Builder():
                     "name": "road_work_sign",
                     "primary_color": colors.orange,
                     "secondary_color": colors.silver,
-                    "label_value": (218, 219)
+                    "label_value": (19, 20),
+                    "pole_type": "normal"
                 }
             },
             "tourist_help_sign":{
@@ -107,7 +117,8 @@ class Builder():
                     "name": "tourist_help_sign",
                     "primary_color": colors.info_brown,
                     "secondary_color": colors.silver,
-                    "label_value": (220, 221)
+                    "label_value": (21, 22),
+                    "pole_type": "double"
                 }
             },
             "info_sign":{
@@ -116,7 +127,8 @@ class Builder():
                     "name": "info_sign",
                     "primary_color": colors.blue,
                     "secondary_color": colors.silver,
-                    "label_value": (221, 222)
+                    "label_value": (23, 24),
+                    "pole_type": "normal"
                 }
             },
             
@@ -125,20 +137,59 @@ class Builder():
         The following functions build the shape of the roadside objects.
     """
 
-    def build_pole(self, starting_point: tuple):
+    def build_pole(self, starting_point: tuple, pole_type: str="normal", anchor="None"):
         """
             Builds the pole of a sign with the bottom left point of the pole corresponding to the starting point.
         """
+        if pole_type == "double":
+            return self._build_double_pole(starting_point, anchor)
+        
+        elif pole_type == "short":
+            return self._build_short_pole(starting_point)
+
         x, y = starting_point
+
         return (
             (x, y), 
             (x+MINIMUM_POLE_WIDTH*SCALE_FACTOR, y), 
             (x+MINIMUM_POLE_WIDTH*SCALE_FACTOR, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR), 
             (x, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR)
         )
-    def build_small_pole(self, starting_point: tuple):
+    
+    def _build_double_pole(self, starting_point: tuple, anchor: str="left"):
+        """ 
+            Builds a double pole for signs that require them.
+            Signs that are compatible with the double pole points are 1.5u wide.
         """
-        This is the pole my gf rides on
+        x, y = starting_point
+        
+        if anchor == "left":
+            return [
+                ((x-4, y), 
+                (x-4-MINIMUM_POLE_WIDTH*SCALE_FACTOR, y), 
+                (x-4-MINIMUM_POLE_WIDTH*SCALE_FACTOR, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR), 
+                (x-4, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR)),
+                ((x-11, y), 
+                (x-11-MINIMUM_POLE_WIDTH*SCALE_FACTOR, y), 
+                (x-11-MINIMUM_POLE_WIDTH*SCALE_FACTOR, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR), 
+                (x-11, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR))
+            ]
+        else:
+            return [
+                ((x+4, y), 
+                (x+4+MINIMUM_POLE_WIDTH*SCALE_FACTOR, y), 
+                (x+4+MINIMUM_POLE_WIDTH*SCALE_FACTOR, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR), 
+                (x+4, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR)),
+                ((x+11, y), 
+                (x+11+MINIMUM_POLE_WIDTH*SCALE_FACTOR, y), 
+                (x+11+MINIMUM_POLE_WIDTH*SCALE_FACTOR, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR), 
+                (x+11, y-MINIMUM_POLE_HEIGHT*SCALE_FACTOR))
+            ]
+
+    
+    def _build_short_pole(self, starting_point: tuple):
+        """
+            Reduced height of a pole for shorter objects e.g. mile marker.
         """
         x,y = starting_point
         return (
@@ -150,54 +201,18 @@ class Builder():
     
     def build_mile_marker(self, starting_point: tuple):
         """
-        this some shit
+            Builds a rectangular mile marker topper. 
+            1u wide, 0.8u tall
         """
-        x,y = starting_point
-        y += 5*SCALE_FACTOR
+        x, y = starting_point
+        # y += 5*SCALE_FACTOR
         return (
             (x+1*SCALE_FACTOR, y), 
-            (x+1*SCALE_FACTOR, y-8*SCALE_FACTOR), 
-            (x-1*SCALE_FACTOR, y-8*SCALE_FACTOR),
+            (x+1*SCALE_FACTOR, y-6*SCALE_FACTOR), 
+            (x-1*SCALE_FACTOR, y-6*SCALE_FACTOR),
             (x-1*SCALE_FACTOR, y)
         )
-    def build_tourist_help_sign(self, starting_point: tuple):
-        """
-        this for the bitches
-        """
-        x, y = starting_point
-        y += 5*SCALE_FACTOR
-        return (
-            (x+15*SCALE_FACTOR, y), 
-            (x+15*SCALE_FACTOR, y-16*SCALE_FACTOR),
-            (x-15*SCALE_FACTOR, y-16*SCALE_FACTOR), 
-            (x-15*SCALE_FACTOR, y)
-        )  
-    def build_info_sign(self, starting_point: tuple):
-        """
-        what's for dinner
-        """
-        x, y = starting_point
-        y += 5*SCALE_FACTOR
-        return (
-            (x+15*SCALE_FACTOR, y), 
-            (x+15*SCALE_FACTOR, y-16*SCALE_FACTOR),
-            (x-15*SCALE_FACTOR, y-16*SCALE_FACTOR), 
-            (x-15*SCALE_FACTOR, y)
-        )
-    def build_road_work_sign(self, starting_point: tuple):
-        """
-        OH fuck there is road work. I'm gonna be late. I should grab Starbucks
-        """
-        x, y = starting_point
-        y += 5*SCALE_FACTOR
-        return (
-            (x, y), 
-            (x+5*SCALE_FACTOR, y-5*SCALE_FACTOR), 
-            (x, y-10*SCALE_FACTOR),
-            (x-5*SCALE_FACTOR, y-5*SCALE_FACTOR)
-        )
 
-        
     def build_diamond_sign(self, starting_point: tuple):
         """
             Builds a diamond sign shape from a starting point which is the middle of the top of the sign pole.
@@ -299,6 +314,49 @@ class Builder():
             (x+1.8*SCALE_FACTOR, y-11.2*SCALE_FACTOR), 
             (x-1.8*SCALE_FACTOR, y-11.2*SCALE_FACTOR), 
             (x-6.5*SCALE_FACTOR, y-4.7*SCALE_FACTOR)
+        )
+    
+    def build_tourist_help_sign(self, starting_point: tuple):
+        """
+            Rectangular sign for tourist help information.
+            1.5u wide, 1.4u tall
+        """
+        x, y = starting_point
+        y += 5*SCALE_FACTOR
+        return (
+            (x+15*SCALE_FACTOR, y), 
+            (x+15*SCALE_FACTOR, y-14*SCALE_FACTOR),
+            (x-15*SCALE_FACTOR, y-14*SCALE_FACTOR), 
+            (x-15*SCALE_FACTOR, y)
+        )  
+    
+    def build_info_sign(self, starting_point: tuple):
+        """
+            Rectangular information sign.
+            1.2u wide, 1.1u tall
+
+        """
+        x, y = starting_point
+        y += 5*SCALE_FACTOR
+        return (
+            (x+12*SCALE_FACTOR, y), 
+            (x+12*SCALE_FACTOR, y-11*SCALE_FACTOR),
+            (x-12*SCALE_FACTOR, y-11*SCALE_FACTOR), 
+            (x-12*SCALE_FACTOR, y)
+        )
+    
+    def build_road_work_sign(self, starting_point: tuple):
+        """
+            Diamond sign for road work information.
+            1.2u wide, 1.2u tall
+        """
+        x, y = starting_point
+        y += 5*SCALE_FACTOR
+        return (
+            (x, y), 
+            (x+6*SCALE_FACTOR, y-6*SCALE_FACTOR), 
+            (x, y-12*SCALE_FACTOR),
+            (x-6*SCALE_FACTOR, y-6*SCALE_FACTOR)
         )
     
     def build_traffic_cone(self, starting_point: tuple, anchor="left"):
